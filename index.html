@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
+  <meta name="theme-color" content="#4f46e5" />
+  <title>CIMOMET — Gestión Comercial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header id="app-header" class="app-header hidden">
+    <div class="app-header-brand">
+      <span class="logo-mark">C</span>
+      <h1>CIMOMET · Gestión Comercial</h1>
+    </div>
+    <nav id="tabs" class="tabs"></nav>
+    <span id="session-pill" class="session-pill"></span>
+    <button id="reset-seed" class="btn btn-ghost" title="Borra todo y vuelve a cargar los datos de ejemplo">Reiniciar datos de ejemplo</button>
+  </header>
+  <main id="view-container" class="view-container">
+    <p class="muted">Cargando…</p>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

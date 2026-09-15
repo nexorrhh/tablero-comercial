@@ -1,0 +1,9 @@
+# Documento de contexto interno: tiene datos reales de la cuenta de CIMOMET
+# (subdominio de noCRM, nombres reales de clientes/prospectos observados).
+# La versión pública sin esos datos es CLAUDE.public.md, que sí se sube.
+CLAUDE.md
+
+# Basura habitual del SO / editor
+.DS_Store
+Thumbs.db
+node_modules/
