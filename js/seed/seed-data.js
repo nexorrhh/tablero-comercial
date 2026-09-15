@@ -8,6 +8,11 @@
 // Nombres de empresa ficticios a propósito (este repo es público): no son
 // clientes ni prospectos reales de CIMOMET, solo datos de ejemplo con sabor
 // a metalmecánica/Rosario para poder evaluar el sistema con las manos.
+//
+// Usuarios: solo los dos que están usando esta evaluación (ambos admin, a
+// pedido). Con los dos como admin no se puede probar el alcance de
+// "vendedor" (§8) — si hace falta esa prueba, conviene sumar un usuario más
+// con ese rol más adelante.
 
 import { generateId } from '../lib/uuid.js';
 import {
@@ -29,19 +34,15 @@ function daysFromNow(n) {
 export function buildSeed() {
   // --- Usuarios y equipos -------------------------------------------------
   const userAdmin = { id: generateId(), first_name: 'Valentín', last_name: 'Angulo', email: 'valentin@cimomet.com', phone: '', mobile_phone: '341 500 1000', role: 'admin', is_active: true, default_reminder_duration: 30 };
-  const userGerente = { id: generateId(), first_name: 'Marcelo', last_name: 'Ferrero', email: 'marcelo.ferrero@cimomet.com', phone: '', mobile_phone: '341 500 1001', role: 'gerente_comercial', is_active: true, default_reminder_duration: 30 };
-  const userVendedor1 = { id: generateId(), first_name: 'Julia', last_name: 'Balduzzi', email: 'julia.balduzzi@cimomet.com', phone: '', mobile_phone: '341 500 1002', role: 'vendedor', is_active: true, default_reminder_duration: 15 };
-  const userVendedor2 = { id: generateId(), first_name: 'Nicolás', last_name: 'Pizzano', email: 'nicolas.pizzano@cimomet.com', phone: '', mobile_phone: '341 500 1003', role: 'vendedor', is_active: true, default_reminder_duration: 15 };
-  const userLectura = { id: generateId(), first_name: 'Ricardo', last_name: 'Molina', email: 'ricardo.molina@cimomet.com', phone: '', mobile_phone: '341 500 1004', role: 'lectura', is_active: true, default_reminder_duration: 30 };
-  const users = [userAdmin, userGerente, userVendedor1, userVendedor2, userLectura];
+  const userLeones = { id: generateId(), first_name: 'Juan Manuel', last_name: 'Leones', email: 'juanmanuel.leones@cimomet.com', phone: '', mobile_phone: '341 500 1001', role: 'admin', is_active: true, default_reminder_duration: 30 };
+  const users = [userAdmin, userLeones];
 
   const team = { id: generateId(), name: 'Equipo Ventas Rosario' };
   const teams = [team];
 
   const teamMembers = [
-    { id: generateId(), team_id: team.id, user_id: userGerente.id, is_manager: true },
-    { id: generateId(), team_id: team.id, user_id: userVendedor1.id, is_manager: false },
-    { id: generateId(), team_id: team.id, user_id: userVendedor2.id, is_manager: false },
+    { id: generateId(), team_id: team.id, user_id: userAdmin.id, is_manager: true },
+    { id: generateId(), team_id: team.id, user_id: userLeones.id, is_manager: true },
   ];
 
   // --- Pipeline y etapas ---------------------------------------------------
@@ -124,7 +125,7 @@ export function buildSeed() {
         CUSTOM_FIELD_PARENT_TYPE.CLIENT
       ),
       is_active: true,
-      owner_id: userGerente.id,
+      owner_id: userAdmin.id,
     },
     {
       id: generateId(),
@@ -136,7 +137,7 @@ export function buildSeed() {
         CUSTOM_FIELD_PARENT_TYPE.CLIENT
       ),
       is_active: true,
-      owner_id: userVendedor2.id,
+      owner_id: userLeones.id,
     },
   ];
 
@@ -200,29 +201,29 @@ export function buildSeed() {
   }
 
   const leadDefs = [
-    makeLead({ title: 'Acerplata - Balduzzi - Tanque de aceite', step: stepPorContactar, status: LEAD_STATUS.TODO, owner: userVendedor1, nextActionInDays: -2, starred: true, tagIds: [tagOilGas.id, tagReferido.id], contact: { firstName: 'Natalia', lastName: 'Bawer', email: 'natalia.bawer@acerplata.com.ar', phone: '801 274 6798', address: '1234 N 7864 W - Salt Lake City, UT' }, freeText: 'Conocí a Natalia en un seminario. Podría estar interesada.', clientFolderId: clientFolders[0].id }),
-    makeLead({ title: 'Norsider - Pizzano, Fernando - Torres de comunicación', step: stepPorContactar, status: LEAD_STATUS.TODO, owner: userVendedor2, nextActionInDays: -1, tagIds: [tagIndustria.id], contact: { firstName: 'Fernando', lastName: 'Pizzano', email: 'fpizzano@norsider.com.ar', phone: '341 611 2233' }, clientFolderId: clientFolders[1].id }),
-    makeLead({ title: 'Paraná Construcciones - Pablo Rascon - Pórticos y monovías', step: stepPorContactar, status: LEAD_STATUS.TODO, owner: userVendedor1, nextActionInDays: 1, tagIds: [tagConstruccion.id], contact: { firstName: 'Pablo', lastName: 'Rascón', email: 'p.rascon@paranaconstrucciones.com.ar', phone: '341 622 4455' } }),
-    makeLead({ title: 'Combustibles Sur - Gómez, Laura - Estructura para planta', step: stepPorContactar, status: LEAD_STATUS.STANDBY, owner: userVendedor2, remindInDays: 13, tagIds: [tagOilGas.id, tagFeria.id], contact: { firstName: 'Laura', lastName: 'Gómez', email: 'lgomez@combustiblessur.com', phone: '341 633 5566' } }),
-    makeLead({ title: 'Siderplata - Suárez, Martín - Cañería industrial', step: stepPorContactar, status: LEAD_STATUS.WON, owner: userVendedor1, amount: 4200000, probability: 100, closedInDays: -3, contact: { firstName: 'Martín', lastName: 'Suárez', email: 'msuarez@siderplata.com' } }),
+    makeLead({ title: 'Acerplata - Balduzzi - Tanque de aceite', step: stepPorContactar, status: LEAD_STATUS.TODO, owner: userAdmin, nextActionInDays: -2, starred: true, tagIds: [tagOilGas.id, tagReferido.id], contact: { firstName: 'Natalia', lastName: 'Bawer', email: 'natalia.bawer@acerplata.com.ar', phone: '801 274 6798', address: '1234 N 7864 W - Salt Lake City, UT' }, freeText: 'Conocí a Natalia en un seminario. Podría estar interesada.', clientFolderId: clientFolders[0].id }),
+    makeLead({ title: 'Norsider - Pizzano, Fernando - Torres de comunicación', step: stepPorContactar, status: LEAD_STATUS.TODO, owner: userLeones, nextActionInDays: -1, tagIds: [tagIndustria.id], contact: { firstName: 'Fernando', lastName: 'Pizzano', email: 'fpizzano@norsider.com.ar', phone: '341 611 2233' }, clientFolderId: clientFolders[1].id }),
+    makeLead({ title: 'Paraná Construcciones - Pablo Rascon - Pórticos y monovías', step: stepPorContactar, status: LEAD_STATUS.TODO, owner: userAdmin, nextActionInDays: 1, tagIds: [tagConstruccion.id], contact: { firstName: 'Pablo', lastName: 'Rascón', email: 'p.rascon@paranaconstrucciones.com.ar', phone: '341 622 4455' } }),
+    makeLead({ title: 'Combustibles Sur - Gómez, Laura - Estructura para planta', step: stepPorContactar, status: LEAD_STATUS.STANDBY, owner: userLeones, remindInDays: 13, tagIds: [tagOilGas.id, tagFeria.id], contact: { firstName: 'Laura', lastName: 'Gómez', email: 'lgomez@combustiblessur.com', phone: '341 633 5566' } }),
+    makeLead({ title: 'Siderplata - Suárez, Martín - Cañería industrial', step: stepPorContactar, status: LEAD_STATUS.WON, owner: userAdmin, amount: 4200000, probability: 100, closedInDays: -3, contact: { firstName: 'Martín', lastName: 'Suárez', email: 'msuarez@siderplata.com' } }),
 
-    makeLead({ title: 'Molino Central - Perez, Diego - Silo metálico', step: stepContactado, status: LEAD_STATUS.TODO, owner: userVendedor1, nextActionInDays: -1, amount: 1800000, probability: 30, tagIds: [tagIndustria.id], contact: { firstName: 'Diego', lastName: 'Perez', email: 'dperez@molinocentral.com.ar', phone: '341 644 7788' } }),
-    makeLead({ title: 'Dulces del Plata - Fontana, Sol - Cinta transportadora', step: stepContactado, status: LEAD_STATUS.TODO, owner: userVendedor2, nextActionInDays: 0, amount: 950000, probability: 30, starred: true, contact: { firstName: 'Sol', lastName: 'Fontana', email: 'sfontana@dulcesdelplata.com' } }),
-    makeLead({ title: 'Agroindustrial Paraná - Ríos, Hugo - Plataforma de acceso', step: stepContactado, status: LEAD_STATUS.STANDBY, owner: userVendedor1, remindInDays: 5, amount: 620000, probability: 30, contact: { firstName: 'Hugo', lastName: 'Ríos', email: 'hrios@agroparana.com.ar' } }),
-    makeLead({ title: 'Cerealera Rosario - Alonso, Carla - Tanque pulmón', step: stepContactado, status: LEAD_STATUS.LOST, owner: userVendedor2, amount: 1100000, closedInDays: -7, contact: { firstName: 'Carla', lastName: 'Alonso', email: 'calonso@cerealerarosario.com.ar' } }),
-    makeLead({ title: 'Acerplata - Domínguez, Iván - Escalera industrial', step: stepContactado, status: LEAD_STATUS.TODO, owner: userVendedor1, nextActionInDays: 3, amount: 340000, probability: 30, clientFolderId: clientFolders[0].id, contact: { firstName: 'Iván', lastName: 'Domínguez', email: 'idominguez@acerplata.com.ar' } }),
+    makeLead({ title: 'Molino Central - Perez, Diego - Silo metálico', step: stepContactado, status: LEAD_STATUS.TODO, owner: userAdmin, nextActionInDays: -1, amount: 1800000, probability: 30, tagIds: [tagIndustria.id], contact: { firstName: 'Diego', lastName: 'Perez', email: 'dperez@molinocentral.com.ar', phone: '341 644 7788' } }),
+    makeLead({ title: 'Dulces del Plata - Fontana, Sol - Cinta transportadora', step: stepContactado, status: LEAD_STATUS.TODO, owner: userLeones, nextActionInDays: 0, amount: 950000, probability: 30, starred: true, contact: { firstName: 'Sol', lastName: 'Fontana', email: 'sfontana@dulcesdelplata.com' } }),
+    makeLead({ title: 'Agroindustrial Paraná - Ríos, Hugo - Plataforma de acceso', step: stepContactado, status: LEAD_STATUS.STANDBY, owner: userAdmin, remindInDays: 5, amount: 620000, probability: 30, contact: { firstName: 'Hugo', lastName: 'Ríos', email: 'hrios@agroparana.com.ar' } }),
+    makeLead({ title: 'Cerealera Rosario - Alonso, Carla - Tanque pulmón', step: stepContactado, status: LEAD_STATUS.LOST, owner: userLeones, amount: 1100000, closedInDays: -7, contact: { firstName: 'Carla', lastName: 'Alonso', email: 'calonso@cerealerarosario.com.ar' } }),
+    makeLead({ title: 'Acerplata - Domínguez, Iván - Escalera industrial', step: stepContactado, status: LEAD_STATUS.TODO, owner: userAdmin, nextActionInDays: 3, amount: 340000, probability: 30, clientFolderId: clientFolders[0].id, contact: { firstName: 'Iván', lastName: 'Domínguez', email: 'idominguez@acerplata.com.ar' } }),
 
-    makeLead({ title: 'Graneles del Litoral - Medina, Roxana - Estructura de acopio', step: stepPropuesta, status: LEAD_STATUS.TODO, owner: userVendedor2, nextActionInDays: -4, amount: 2600000, probability: 50, starred: true, tagIds: [tagOilGas.id], contact: { firstName: 'Roxana', lastName: 'Medina', email: 'rmedina@granoslitoral.com' } }),
-    makeLead({ title: 'Norsider - Castro, Emiliano - Gasoducto ramal sur', step: stepPropuesta, status: LEAD_STATUS.TODO, owner: userVendedor1, nextActionInDays: 2, amount: 5200000, probability: 50, clientFolderId: clientFolders[1].id, contact: { firstName: 'Emiliano', lastName: 'Castro', email: 'ecastro@norsider.com.ar' } }),
-    makeLead({ title: 'Paraná Construcciones - Nuñez, Patricia - Pasarela peatonal', step: stepPropuesta, status: LEAD_STATUS.STANDBY, owner: userVendedor2, remindInDays: 8, amount: 780000, probability: 50, contact: { firstName: 'Patricia', lastName: 'Nuñez', email: 'pnunez@paranaconstrucciones.com.ar' } }),
-    makeLead({ title: 'Siderplata - Bianchi, Rodrigo - Soporte de cañerías', step: stepPropuesta, status: LEAD_STATUS.WON, owner: userVendedor1, amount: 3100000, probability: 100, closedInDays: -1, contact: { firstName: 'Rodrigo', lastName: 'Bianchi', email: 'rbianchi@siderplata.com' } }),
-    makeLead({ title: 'Molino Central - Vega, Sabrina - Tolva de descarga', step: stepPropuesta, status: LEAD_STATUS.CANCELLED, owner: userVendedor2, amount: 450000, closedInDays: -10, contact: { firstName: 'Sabrina', lastName: 'Vega', email: 'svega@molinocentral.com.ar' } }),
+    makeLead({ title: 'Graneles del Litoral - Medina, Roxana - Estructura de acopio', step: stepPropuesta, status: LEAD_STATUS.TODO, owner: userLeones, nextActionInDays: -4, amount: 2600000, probability: 50, starred: true, tagIds: [tagOilGas.id], contact: { firstName: 'Roxana', lastName: 'Medina', email: 'rmedina@granoslitoral.com' } }),
+    makeLead({ title: 'Norsider - Castro, Emiliano - Gasoducto ramal sur', step: stepPropuesta, status: LEAD_STATUS.TODO, owner: userAdmin, nextActionInDays: 2, amount: 5200000, probability: 50, clientFolderId: clientFolders[1].id, contact: { firstName: 'Emiliano', lastName: 'Castro', email: 'ecastro@norsider.com.ar' } }),
+    makeLead({ title: 'Paraná Construcciones - Nuñez, Patricia - Pasarela peatonal', step: stepPropuesta, status: LEAD_STATUS.STANDBY, owner: userLeones, remindInDays: 8, amount: 780000, probability: 50, contact: { firstName: 'Patricia', lastName: 'Nuñez', email: 'pnunez@paranaconstrucciones.com.ar' } }),
+    makeLead({ title: 'Siderplata - Bianchi, Rodrigo - Soporte de cañerías', step: stepPropuesta, status: LEAD_STATUS.WON, owner: userAdmin, amount: 3100000, probability: 100, closedInDays: -1, contact: { firstName: 'Rodrigo', lastName: 'Bianchi', email: 'rbianchi@siderplata.com' } }),
+    makeLead({ title: 'Molino Central - Vega, Sabrina - Tolva de descarga', step: stepPropuesta, status: LEAD_STATUS.CANCELLED, owner: userLeones, amount: 450000, closedInDays: -10, contact: { firstName: 'Sabrina', lastName: 'Vega', email: 'svega@molinocentral.com.ar' } }),
 
-    makeLead({ title: 'Combustibles Sur - Herrera, Gastón - Skid de bombeo', step: stepNegociacion, status: LEAD_STATUS.TODO, owner: userVendedor1, nextActionInDays: -1, amount: 8900000, probability: 70, starred: true, tagIds: [tagOilGas.id], contact: { firstName: 'Gastón', lastName: 'Herrera', email: 'gherrera@combustiblessur.com' } }),
-    makeLead({ title: 'Agroindustrial Paraná - Ojeda, Marina - Planta de silos', step: stepNegociacion, status: LEAD_STATUS.TODO, owner: userVendedor2, nextActionInDays: 1, amount: 6300000, probability: 70, contact: { firstName: 'Marina', lastName: 'Ojeda', email: 'mojeda@agroparana.com.ar' } }),
-    makeLead({ title: 'Graneles del Litoral - Paz, Federico - Ampliación de puerto', step: stepNegociacion, status: LEAD_STATUS.STANDBY, owner: userVendedor1, remindInDays: 20, amount: 12000000, probability: 70, contact: { firstName: 'Federico', lastName: 'Paz', email: 'fpaz@granoslitoral.com' } }),
-    makeLead({ title: 'Cerealera Rosario - Correa, Yamila - Cinta de embarque', step: stepNegociacion, status: LEAD_STATUS.WON, owner: userVendedor2, amount: 4700000, probability: 100, closedInDays: -5, contact: { firstName: 'Yamila', lastName: 'Correa', email: 'ycorrea@cerealerarosario.com.ar' } }),
-    makeLead({ title: 'Dulces del Plata - Leiva, Damián - Depósito metálico', step: stepNegociacion, status: LEAD_STATUS.LOST, owner: userVendedor1, amount: 2100000, closedInDays: -15, contact: { firstName: 'Damián', lastName: 'Leiva', email: 'dleiva@dulcesdelplata.com' } }),
+    makeLead({ title: 'Combustibles Sur - Herrera, Gastón - Skid de bombeo', step: stepNegociacion, status: LEAD_STATUS.TODO, owner: userAdmin, nextActionInDays: -1, amount: 8900000, probability: 70, starred: true, tagIds: [tagOilGas.id], contact: { firstName: 'Gastón', lastName: 'Herrera', email: 'gherrera@combustiblessur.com' } }),
+    makeLead({ title: 'Agroindustrial Paraná - Ojeda, Marina - Planta de silos', step: stepNegociacion, status: LEAD_STATUS.TODO, owner: userLeones, nextActionInDays: 1, amount: 6300000, probability: 70, contact: { firstName: 'Marina', lastName: 'Ojeda', email: 'mojeda@agroparana.com.ar' } }),
+    makeLead({ title: 'Graneles del Litoral - Paz, Federico - Ampliación de puerto', step: stepNegociacion, status: LEAD_STATUS.STANDBY, owner: userAdmin, remindInDays: 20, amount: 12000000, probability: 70, contact: { firstName: 'Federico', lastName: 'Paz', email: 'fpaz@granoslitoral.com' } }),
+    makeLead({ title: 'Cerealera Rosario - Correa, Yamila - Cinta de embarque', step: stepNegociacion, status: LEAD_STATUS.WON, owner: userLeones, amount: 4700000, probability: 100, closedInDays: -5, contact: { firstName: 'Yamila', lastName: 'Correa', email: 'ycorrea@cerealerarosario.com.ar' } }),
+    makeLead({ title: 'Dulces del Plata - Leiva, Damián - Depósito metálico', step: stepNegociacion, status: LEAD_STATUS.LOST, owner: userAdmin, amount: 2100000, closedInDays: -15, contact: { firstName: 'Damián', lastName: 'Leiva', email: 'dleiva@dulcesdelplata.com' } }),
 
     // Sin asignar — bandeja separada de §8, todavía sin responsable.
     makeLead({ title: 'Cementera del Sur - contacto sin definir - Silo de cemento', step: stepPorContactar, status: LEAD_STATUS.TODO, owner: null, contact: { firstName: 'Ricardo', lastName: 'Funes', email: 'rfunes@cementeradelsur.com.ar' } }),
@@ -241,7 +242,7 @@ export function buildSeed() {
   const prospectingList = {
     id: generateId(),
     title: 'Prospección Objetivos de Oil & Gas',
-    owner_id: userVendedor2.id,
+    owner_id: userLeones.id,
     is_archived: false,
   };
   const prospectingLists = [prospectingList];
