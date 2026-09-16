@@ -636,6 +636,56 @@ button:disabled, input:disabled, select:disabled, textarea:disabled {
   cursor: not-allowed;
 }
 
+/* Módulo Home: seguimiento por comprador + calendario */
+.modal-wide { max-width: 920px; }
+
+.badge-followup-pending { background: var(--warning-light); color: var(--warning); }
+.badge-followup-in_progress { background: var(--primary-soft); color: var(--primary-dark); }
+.badge-followup-resolved { background: var(--success-light); color: var(--success); }
+
+.lead-open-link { cursor: pointer; color: var(--primary-dark); text-decoration: underline; text-decoration-color: var(--primary-soft); }
+.lead-open-link:hover { color: var(--primary); }
+
+.inline-form-row td { background: var(--bg-alt); padding: 12px !important; }
+.inline-panel { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
+.inline-panel textarea { flex: 1; min-width: 220px; font-family: inherit; font-size: 13px; padding: 7px 9px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); }
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.calendar-weekdays { margin-bottom: 4px; }
+.calendar-weekday { text-align: center; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+.calendar-cell {
+  aspect-ratio: 1;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: border-color 0.15s var(--ease), background-color 0.15s var(--ease);
+}
+.calendar-cell:hover { border-color: var(--primary); }
+.calendar-cell-empty { border: none; background: transparent; cursor: default; }
+.calendar-cell-today .calendar-cell-day { color: var(--primary); font-weight: 700; }
+.calendar-cell-selected { border-color: var(--primary); background: var(--primary-light); }
+.calendar-cell-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); }
+
 @keyframes fade-in {
   from { opacity: 0; }
   to { opacity: 1; }

@@ -20,6 +20,10 @@ export const COLLECTIONS = Object.freeze({
   USERS: 'users',
   TEAMS: 'teams',
   TEAM_MEMBERS: 'team_members',
+  // Módulo `home` — seguimiento de proyectos/presupuestos por comprador.
+  // Adelanto puntual de Fase 3 (CLAUDE.md §10), fuera del modelo de noCRM.
+  BUYER_EVENTS: 'buyer_events',
+  BUYER_NOTES: 'buyer_notes',
 });
 
 // Estado operativo del lead — eje independiente de la etapa (CLAUDE.md §3).
@@ -88,4 +92,18 @@ export const COMMENT_PARENT_TYPE = Object.freeze({
   LEAD: 'lead',
   PROSPECT: 'prospect',
   PROSPECTING_LIST: 'prospecting_list',
+});
+
+// Seguimiento comercial post-presupuesto, eje independiente de step/status
+// del lead — vive solo en el módulo `home` (adelanto de Fase 3, CLAUDE.md §10).
+export const FOLLOWUP_STATUS = Object.freeze({
+  PENDING: 'pending',
+  IN_PROGRESS: 'in_progress',
+  RESOLVED: 'resolved',
+});
+
+export const FOLLOWUP_STATUS_LABELS = Object.freeze({
+  [FOLLOWUP_STATUS.PENDING]: 'Pendiente',
+  [FOLLOWUP_STATUS.IN_PROGRESS]: 'Gestión',
+  [FOLLOWUP_STATUS.RESOLVED]: 'Resuelto',
 });

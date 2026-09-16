@@ -22,6 +22,7 @@ import {
   FIELD_TYPES,
   CUSTOM_FIELD_PARENT_TYPE,
   ACTIVITY_KIND,
+  FOLLOWUP_STATUS,
 } from '../lib/collections.js';
 import { buildDescription } from '../modules/parser/parser.js';
 
@@ -158,6 +159,7 @@ export function buildSeed() {
     closedInDays = null,
     clientFolderId = null,
     tagIds = [],
+    followupStatus = FOLLOWUP_STATUS.PENDING,
   }) {
     const description = buildDescription(
       {
@@ -196,22 +198,23 @@ export function buildSeed() {
       created_by_id: owner ? owner.id : userAdmin.id,
       team_id: owner ? team.id : null,
       client_folder_id: clientFolderId,
+      followup_status: followupStatus, // módulo `home` — CLAUDE.md §10
       _tagIds: tagIds, // se vuelca a lead_tags más abajo
     };
   }
 
   const leadDefs = [
-    makeLead({ title: 'Acerplata - Balduzzi - Tanque de aceite', step: stepPorContactar, status: LEAD_STATUS.TODO, owner: userAdmin, nextActionInDays: -2, starred: true, tagIds: [tagOilGas.id, tagReferido.id], contact: { firstName: 'Natalia', lastName: 'Bawer', email: 'natalia.bawer@acerplata.com.ar', phone: '801 274 6798', address: '1234 N 7864 W - Salt Lake City, UT' }, freeText: 'Conocí a Natalia en un seminario. Podría estar interesada.', clientFolderId: clientFolders[0].id }),
-    makeLead({ title: 'Norsider - Pizzano, Fernando - Torres de comunicación', step: stepPorContactar, status: LEAD_STATUS.TODO, owner: userLeones, nextActionInDays: -1, tagIds: [tagIndustria.id], contact: { firstName: 'Fernando', lastName: 'Pizzano', email: 'fpizzano@norsider.com.ar', phone: '341 611 2233' }, clientFolderId: clientFolders[1].id }),
+    makeLead({ title: 'Acerplata - Balduzzi - Tanque de aceite', step: stepPorContactar, status: LEAD_STATUS.TODO, owner: userAdmin, nextActionInDays: -2, starred: true, tagIds: [tagOilGas.id, tagReferido.id], contact: { firstName: 'Natalia', lastName: 'Bawer', email: 'natalia.bawer@acerplata.com.ar', phone: '801 274 6798', address: '1234 N 7864 W - Salt Lake City, UT' }, freeText: 'Conocí a Natalia en un seminario. Podría estar interesada.', clientFolderId: clientFolders[0].id, followupStatus: FOLLOWUP_STATUS.IN_PROGRESS }),
+    makeLead({ title: 'Norsider - Pizzano, Fernando - Torres de comunicación', step: stepPorContactar, status: LEAD_STATUS.TODO, owner: userLeones, nextActionInDays: -1, tagIds: [tagIndustria.id], contact: { firstName: 'Fernando', lastName: 'Pizzano', email: 'fpizzano@norsider.com.ar', phone: '341 611 2233' }, clientFolderId: clientFolders[1].id, followupStatus: FOLLOWUP_STATUS.IN_PROGRESS }),
     makeLead({ title: 'Paraná Construcciones - Pablo Rascon - Pórticos y monovías', step: stepPorContactar, status: LEAD_STATUS.TODO, owner: userAdmin, nextActionInDays: 1, tagIds: [tagConstruccion.id], contact: { firstName: 'Pablo', lastName: 'Rascón', email: 'p.rascon@paranaconstrucciones.com.ar', phone: '341 622 4455' } }),
-    makeLead({ title: 'Combustibles Sur - Gómez, Laura - Estructura para planta', step: stepPorContactar, status: LEAD_STATUS.STANDBY, owner: userLeones, remindInDays: 13, tagIds: [tagOilGas.id, tagFeria.id], contact: { firstName: 'Laura', lastName: 'Gómez', email: 'lgomez@combustiblessur.com', phone: '341 633 5566' } }),
+    makeLead({ title: 'Combustibles Sur - Gómez, Laura - Estructura para planta', step: stepPorContactar, status: LEAD_STATUS.STANDBY, owner: userLeones, remindInDays: 13, tagIds: [tagOilGas.id, tagFeria.id], contact: { firstName: 'Laura', lastName: 'Gómez', email: 'lgomez@combustiblessur.com', phone: '341 633 5566' }, followupStatus: FOLLOWUP_STATUS.RESOLVED }),
     makeLead({ title: 'Siderplata - Suárez, Martín - Cañería industrial', step: stepPorContactar, status: LEAD_STATUS.WON, owner: userAdmin, amount: 4200000, probability: 100, closedInDays: -3, contact: { firstName: 'Martín', lastName: 'Suárez', email: 'msuarez@siderplata.com' } }),
 
     makeLead({ title: 'Molino Central - Perez, Diego - Silo metálico', step: stepContactado, status: LEAD_STATUS.TODO, owner: userAdmin, nextActionInDays: -1, amount: 1800000, probability: 30, tagIds: [tagIndustria.id], contact: { firstName: 'Diego', lastName: 'Perez', email: 'dperez@molinocentral.com.ar', phone: '341 644 7788' } }),
-    makeLead({ title: 'Dulces del Plata - Fontana, Sol - Cinta transportadora', step: stepContactado, status: LEAD_STATUS.TODO, owner: userLeones, nextActionInDays: 0, amount: 950000, probability: 30, starred: true, contact: { firstName: 'Sol', lastName: 'Fontana', email: 'sfontana@dulcesdelplata.com' } }),
+    makeLead({ title: 'Dulces del Plata - Fontana, Sol - Cinta transportadora', step: stepContactado, status: LEAD_STATUS.TODO, owner: userLeones, nextActionInDays: 0, amount: 950000, probability: 30, starred: true, contact: { firstName: 'Sol', lastName: 'Fontana', email: 'sfontana@dulcesdelplata.com' }, followupStatus: FOLLOWUP_STATUS.IN_PROGRESS }),
     makeLead({ title: 'Agroindustrial Paraná - Ríos, Hugo - Plataforma de acceso', step: stepContactado, status: LEAD_STATUS.STANDBY, owner: userAdmin, remindInDays: 5, amount: 620000, probability: 30, contact: { firstName: 'Hugo', lastName: 'Ríos', email: 'hrios@agroparana.com.ar' } }),
-    makeLead({ title: 'Cerealera Rosario - Alonso, Carla - Tanque pulmón', step: stepContactado, status: LEAD_STATUS.LOST, owner: userLeones, amount: 1100000, closedInDays: -7, contact: { firstName: 'Carla', lastName: 'Alonso', email: 'calonso@cerealerarosario.com.ar' } }),
-    makeLead({ title: 'Acerplata - Domínguez, Iván - Escalera industrial', step: stepContactado, status: LEAD_STATUS.TODO, owner: userAdmin, nextActionInDays: 3, amount: 340000, probability: 30, clientFolderId: clientFolders[0].id, contact: { firstName: 'Iván', lastName: 'Domínguez', email: 'idominguez@acerplata.com.ar' } }),
+    makeLead({ title: 'Cerealera Rosario - Alonso, Carla - Tanque pulmón', step: stepContactado, status: LEAD_STATUS.LOST, owner: userLeones, amount: 1100000, closedInDays: -7, contact: { firstName: 'Carla', lastName: 'Alonso', email: 'calonso@cerealerarosario.com.ar' }, followupStatus: FOLLOWUP_STATUS.RESOLVED }),
+    makeLead({ title: 'Acerplata - Domínguez, Iván - Escalera industrial', step: stepContactado, status: LEAD_STATUS.TODO, owner: userAdmin, nextActionInDays: 3, amount: 340000, probability: 30, clientFolderId: clientFolders[0].id, contact: { firstName: 'Iván', lastName: 'Domínguez', email: 'idominguez@acerplata.com.ar' }, followupStatus: FOLLOWUP_STATUS.IN_PROGRESS }),
 
     makeLead({ title: 'Graneles del Litoral - Medina, Roxana - Estructura de acopio', step: stepPropuesta, status: LEAD_STATUS.TODO, owner: userLeones, nextActionInDays: -4, amount: 2600000, probability: 50, starred: true, tagIds: [tagOilGas.id], contact: { firstName: 'Roxana', lastName: 'Medina', email: 'rmedina@granoslitoral.com' } }),
     makeLead({ title: 'Norsider - Castro, Emiliano - Gasoducto ramal sur', step: stepPropuesta, status: LEAD_STATUS.TODO, owner: userAdmin, nextActionInDays: 2, amount: 5200000, probability: 50, clientFolderId: clientFolders[1].id, contact: { firstName: 'Emiliano', lastName: 'Castro', email: 'ecastro@norsider.com.ar' } }),
@@ -253,6 +256,26 @@ export function buildSeed() {
     { id: generateId(), prospecting_list_id: prospectingList.id, company_name: 'Petrotec SA', contact_name: 'Bruno Aguirre', email: 'baguirre@petrotec.com', phone: '341 500 9933', custom_values: {}, status: PROSPECT_STATUS.DISCARDED, converted_lead_id: null },
   ];
 
+  // --- Módulo Home: seguimiento por comprador (adelanto de Fase 3, CLAUDE.md §10) ---
+  // buyer_key = primer segmento del título del lead ("CLIENTE - Contacto - Proyecto").
+  const buyerEvents = [
+    { id: generateId(), buyer_key: 'Acerplata', scheduled_at: daysFromNow(5), note: 'Retomar para cerrar alcance del tanque y confirmar fecha de escalera.', is_done: false, created_by_id: userAdmin.id, related_lead_id: null },
+    { id: generateId(), buyer_key: 'Acerplata', scheduled_at: daysFromNow(-6), note: 'Primer contacto: se lo tanteó, pidió tiempo para evaluar presupuesto.', is_done: true, created_by_id: userAdmin.id, related_lead_id: null },
+    { id: generateId(), buyer_key: 'Norsider', scheduled_at: daysFromNow(2), note: 'Fernando dijo que la torre depende de aprobación interna, llamar para confirmar.', is_done: false, created_by_id: userLeones.id, related_lead_id: null },
+    { id: generateId(), buyer_key: 'Dulces del Plata', scheduled_at: daysFromNow(0), note: 'Coordinar con Sol el detalle técnico de la cinta antes de mandar precio final.', is_done: false, created_by_id: userLeones.id, related_lead_id: null },
+    { id: generateId(), buyer_key: 'Combustibles Sur', scheduled_at: daysFromNow(-3), note: 'Llamada de cierre: Laura confirmó que no avanzan por ahora.', is_done: true, created_by_id: userLeones.id, related_lead_id: null },
+    { id: generateId(), buyer_key: 'Cerealera Rosario', scheduled_at: daysFromNow(-8), note: 'Llamada de cierre con Carla: quedó perdido, prefirieron otro proveedor.', is_done: true, created_by_id: userLeones.id, related_lead_id: null },
+  ];
+
+  const buyerNotes = [
+    { id: generateId(), buyer_key: 'Acerplata', user_id: userAdmin.id, note: 'Primer contacto con Natalia: la conocí en un seminario, quedó en pensarlo.', related_lead_id: null, created_at: daysFromNow(-9) },
+    { id: generateId(), buyer_key: 'Acerplata', user_id: userAdmin.id, note: 'La llamé, la tanteé sobre el tanque de aceite. Coordinamos nueva llamada en 5 días. De paso surgió la escalera industrial con Iván Domínguez, mismo cliente.', related_lead_id: null, created_at: daysFromNow(-6) },
+    { id: generateId(), buyer_key: 'Norsider', user_id: userLeones.id, note: 'Fernando comentó que además de las torres están mirando un gasoducto ramal sur — dos proyectos en danza con el mismo comprador.', related_lead_id: null, created_at: daysFromNow(-1) },
+    { id: generateId(), buyer_key: 'Dulces del Plata', user_id: userLeones.id, note: 'Definición: Sol pidió specs técnicas antes de avanzar. Le mandamos ficha técnica y quedamos en hablar hoy.', related_lead_id: null, created_at: daysFromNow(0) },
+    { id: generateId(), buyer_key: 'Combustibles Sur', user_id: userLeones.id, note: 'Cierre: Laura confirmó que por ahora no avanzan con la estructura para planta.', related_lead_id: null, created_at: daysFromNow(-3) },
+    { id: generateId(), buyer_key: 'Cerealera Rosario', user_id: userLeones.id, note: 'Cierre: se lo llevó otro proveedor, quedó perdido.', related_lead_id: null, created_at: daysFromNow(-8) },
+  ];
+
   return {
     [COLLECTIONS.USERS]: users,
     [COLLECTIONS.TEAMS]: teams,
@@ -272,5 +295,7 @@ export function buildSeed() {
     [COLLECTIONS.COMMENTS]: [],
     [COLLECTIONS.ATTACHMENTS]: [],
     [COLLECTIONS.LEAD_HISTORY]: [],
+    [COLLECTIONS.BUYER_EVENTS]: buyerEvents,
+    [COLLECTIONS.BUYER_NOTES]: buyerNotes,
   };
 }

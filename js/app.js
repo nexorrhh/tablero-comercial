@@ -14,6 +14,7 @@ import { renderConfig } from './modules/config/config.js';
 import { renderReports } from './modules/reports/reports.js';
 import { renderUnassignedLeads } from './modules/leads/unassigned.js';
 import { renderUsersModule } from './modules/users/users.js';
+import { renderHome } from './modules/home/home.js';
 import { renderLogin } from './modules/auth/login.js';
 import { getCurrentUser, logout } from './modules/auth/session.js';
 import { revertOverdueStandbyLeads } from './modules/leads/lead-service.js';
@@ -21,6 +22,7 @@ import { revertOverdueStandbyLeads } from './modules/leads/lead-service.js';
 gateway.setSeedLoader(buildSeed);
 
 const ALL_TABS = [
+  { id: 'home', label: 'Home', render: renderHome, visible: () => true },
   { id: 'pipeline', label: 'Pipeline', render: renderPipelineKanban, visible: () => true },
   { id: 'leads', label: 'Leads', render: renderLeadsTable, visible: () => true },
   { id: 'unassigned', label: 'Sin asignar', render: renderUnassignedLeads, visible: (role) => canManageAssignment(role) },

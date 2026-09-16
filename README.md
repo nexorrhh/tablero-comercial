@@ -33,7 +33,9 @@ js/
   modules/
     auth/       leads/       pipeline/    prospects/
     clients/    activities/  parser/      config/
-    users/      reports/
+    users/      reports/     home/
 ```
 
 Cada módulo accede a los datos únicamente a través de `js/lib/gateway.js` — es la pieza que permite cambiar `localStorage` por una base de datos real en la Fase 2 sin tocar el resto del código.
+
+**`home`** es aparte: es un adelanto puntual de la Fase 3 (seguimiento de proyectos/presupuestos por comprador, con calendario e historial de contactos), no parte de la réplica de noCRM. Reutiliza `leads` como si fueran proyectos en lugar de esperar a una entidad `quotes` real — ver la nota fechada 2026-09-16 en `CLAUDE.public.md` §10.
